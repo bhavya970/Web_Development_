@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wikipedia-like Page</title>
+    <style>
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            scroll-behavior: smooth; 
+        }
+        
+   
+        .wrapper {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        
+        nav {
+            background: #007bff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        nav h2 {
+            margin-top: 0;
+            color: #fff;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 5px 0;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        nav ul li a:hover,
+        nav ul li a.active {
+            text-decoration: underline;
+            color: #ffd700; 
+        }
+
+        nav ul ul {
+            padding-left: 20px;
+        }
+
+        h1, h2, h3 {
+            cursor: pointer;
+            padding: 10px;
+            margin: 20px 0 0 0;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+        }
+
+        h1 {
+            font-size: 28px;
+        }
+
+        h2 {
+            font-size: 24px;
+        }
+
+        h3 {
+            font-size: 20px;
+        }
+
+        h1:hover, h2:hover, h3:hover {
+            background-color: #0056b3;
+        }
+
+   
+        .content {
+            display: none;
+            padding: 10px 20px;
+            background-color: #f9f9f9;
+            border-left: 3px solid #007bff;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+   
+        @media (max-width: 600px) {
+            body {
+                font-size: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+
+        
+        <nav>
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#early-life">Early Life</a></li>
+                <li><a href="#career">Career</a>
+                    <ul>
+                        <li><a href="#first-job">First Job</a></li>
+                        <li><a href="#second-job">Second Job</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+       
+        <section id="early-life">
+            <h1>Early Life</h1>
+            <div class="content">
+                <p>Bhavya Sree Gurram was born in Bellamkonda, Andhra Pradesh to Srinivasa Reddy  and Anusha. Her father is an Farmer. Her mother is an House Wife. Bhavya Sree, has 2 Elder Sisters : G.Madhavi and G.Harini. 
+        </section>
+
+        
+        <section id="career">
+            <h1>Career</h1>
+            <div class="content">
+                <section id="first-job">
+                    <h2>First Job</h2>
+                    <div class="content">
+                        <p>Bhavya Sree is an Student at "Vignan's Lara Institute Of Technology & Science" pursuing 3rd year in the stream of Computer Science and Engineering.</p>
+                </section>
+                <section id="second-job">
+                    <h2>Second Job</h2>
+                    <div class="content">
+                        <p>This is a description of the second job. Elaborate on the second job, the company, position, and achievements.</p>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Function to toggle visibility of content on heading click
+        document.querySelectorAll('h1, h2, h3').forEach(heading => {
+            heading.addEventListener('click', () => {
+                const content = heading.nextElementSibling;
+                if (content && content.classList.contains('content')) {
+                    const isVisible = content.style.display === 'block';
+                    // Hide all sibling content sections
+                    document.querySelectorAll('.content').forEach(sec => {
+                        sec.style.display = 'none';
+                    });
+                    // Toggle the clicked section
+                    content.style.display = isVisible ? 'none' : 'block';
+                }
+            });
+        });
+
+        // Function to display content when TOC link is clicked
+        document.querySelectorAll('nav ul li a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                // Prevent default anchor behavior
+                // e.preventDefault();
+
+                // Remove 'active' class from all links
+                document.querySelectorAll('nav ul li a').forEach(a => a.classList.remove('active'));
+
+                // Add 'active' class to the clicked link
+                link.classList.add('active');
+
+                // Get the target section ID from href
+                const targetId = link.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+
+                if (targetSection) {
+                    // Find the corresponding content div
+                    const content = targetSection.querySelector('.content');
+                    if (content) {
+                        // Hide all content sections
+                        document.querySelectorAll('.content').forEach(sec => {
+                            sec.style.display = 'none';
+                        });
+                        // Show the target content
+                        content.style.display = 'block';
+                    }
+
+                    // If the target section is nested, ensure parent sections are expanded
+                    let parent = targetSection.parentElement;
+                    while (parent && parent.classList.contains('content')) {
+                        parent.style.display = 'block';
+                        // Move up to the next parent
+                        const parentSection = parent.previousElementSibling;
+                        parent = parentSection ? parentSection.parentElement : null;
+                    }
+                }
+            });
+        });
+
+        // Optional: Highlight active section on scroll
+        window.addEventListener('scroll', () => {
+            let current = '';
+            document.querySelectorAll('section').forEach(section => {
+                const sectionTop = section.offsetTop - 60;
+                if (pageYOffset >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('nav ul li a').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
